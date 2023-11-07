@@ -3,11 +3,5 @@
 hostname=$(hostname)
 echo HOSTNAME = $hostname
 
-# Получаем текущую временную зону
-timezone=$(timedatectl show --property=Timezone --value)
-
-# Получаем смещение временной зоны относительно UTC без нулей
-offset=$(date +'%::z')
-
-# Выводим информацию о временной зоне
-echo "TIMEZONE = $timezone $offset"
+TIMEZONE=$(timedatectl| grep "Time" | awk '{print $3, $4, $5}' | sed -E 's/^(.*)\((.*), (.*)00\)/\1 \2 \3/' | awk '{ printf ("%s %s %d", $1, $2, $3) }')
+echo "TIMEZONE = $TIMEZONE"
