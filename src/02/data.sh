@@ -22,7 +22,7 @@ echo UPTIME = $uptime
 uptime_sec=$(awk '{printf("%.f", $1)}' /proc/uptime)
 echo UPTIME_SEC = $uptime_sec seconds
 
-inteface="enp0s3"
+inteface="eth0"
 
 ip_address=$(ip addr show $interface)
 echo IP = $ip_address
