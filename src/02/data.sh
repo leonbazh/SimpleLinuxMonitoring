@@ -24,6 +24,6 @@ echo UPTIME_SEC = $uptime_sec seconds
 
 inteface="enp0s3"
 
-ip=$(ip a show $interface)
-echo IP = $ip
+ip_address=$(ip addr show $interface)
+echo IP = $ip_address
 
