@@ -3,15 +3,15 @@
 #first parameter
 
 if [ $1 == 1 ]; then
-  color1="\033[37m" #white
+  color1="\033[47m" #white
 elif [ $1 == 2 ]; then
-  color1="\033[31m" #red
+  color1="\033[41m" #red
 elif [ $1 == 3 ]; then
-  color1="\033[32m" #green
+  color1="\033[42m" #green
 elif [ $1 == 4 ]; then
-  color1="\033[34m" #blue
+  color1="\033[44m" #blue
 elif [ $1 == 5 ]; then
-  color1="\033[35m" #purple
+  color1="\033[45m" #purple
 elif [ $1 == 6 ]; then
   color1="\033[40m" #black
 fi
@@ -29,21 +29,21 @@ elif [ $2 == 4 ]; then
 elif [ $2 == 5 ]; then
   color2="\033[35m"
 elif [ $2 == 6 ]; then
-  color2="\033[40m"
+  color2="\033[30m"
 fi
 
 #third parameter
 
 if [ $3 == 1 ]; then
-  color3="\033[37m"
+  color3="\033[47m"
 elif [ $3 == 2 ]; then
-  color3="\033[31m"
+  color3="\033[41m"
 elif [ $3 == 3 ]; then
-  color3="\033[32m"
+  color3="\033[42m"
 elif [ $3 == 4 ]; then
-  color3="\033[34m"
+  color3="\033[44m"
 elif [ $3 == 5 ]; then
-  color3="\033[35m"
+  color3="\033[45m"
 elif [ $3 == 6 ]; then
   color3="\033[40m"
 fi
@@ -61,7 +61,7 @@ elif [ $4 == 4 ]; then
 elif [ $4 == 5 ]; then
   color4="\033[35m"
 elif [ $4 == 6 ]; then
-  color4="\033[40m"
+  color4="\033[30m"
 fi
 
 regular_text="\033[0m" #default text
