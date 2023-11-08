@@ -1,50 +1,48 @@
 #!/bin/bash
 
-hostname=$(hostname)
-echo -e "$1$2HOSTNAME = $3$4$hostname$5"
+HOSTNAME=$(hostname)
+echo -e "$1$2HOSTNAME$5 = $3$4$HOSTNAME$5"
 
-timezone=$(timedatectl show --property=Timezone --value)
-utc=$(date +'%:::z' | sed 's/+0//')
-echo -e "$1$2TIMEZONE = $3$4$timezone -$utc$5"
+TIMEZONE=$(timedatectl| grep "Time" | awk '{print $3, $4, $5}' | sed -E 's/^(.*)\((.*), (.*)00\)/\1 \2 \3/' | awk '{ printf ("%s %s %d", $1, $2, $3) }')
+echo -e "$1$2TIMEZONE$5 = $3$4$TIMEZONE$5"
 
-user=$(whoami)
-echo -e "$1$2USER = $3$4$user$5"
+USER=$(whoami)
+echo -e "$1$2USER$5 = $3$4$USER$5"
 
-os=$(lsb_release -ds)
-echo -e "$1$2OS = $3$4$os$5"
+OS=$(cat /etc/os-release | awk '/PRETTY_NAME/{print substr($1,14), $2, substr($3,1,3)}')
+echo -e "$1$2OS$5 = $3$4$OS$5"
 
-date=$(date +'%d %b %Y %H:%M:%S')
-echo -e "$1$2DATE = $3$4$date$5"
+DATE=$(date +"%d %B %Y %T")
+echo -e "$1$2DATE$5 = $3$4$DATE$5"
 
-uptime=$(uptime -p | awk '{print $2,$3}')
-echo -e "$1$2UPTIME = $3$4$uptime$5"
+UPTIME=$(uptime | awk '{print $3}'| sed 's/,//')
+echo -e "$1$2UPTIME$5 = $3$4$UPTIME$5"
 
-uptime_sec=$(awk '{printf("%.f", $1)}' /proc/uptime)
-echo -e "$1$2UPTIME_SEC = $3$4$uptime_sec seconds$5"
+UPTIME_SEC=$(cat /proc/uptime | awk '{printf("%.f", $1)}')
+echo -e "$1$2UPTIME_SEC$5 = $3$4$UPTIME_SEC$5"
 
-ip_address=$(ip a show enp0s3 | awk '/inet / {print $2}')
-echo -e "$1$2IP = $3$4$ip_address$5"
+IP=$(hostname -I)
+echo -e "$1$2IP$5 = $3$4$IP$5"
 
-netmask=$(ipcalc $ip_address | awk '/Netmask: / {print $2}')
-echo -e "$1$2NETMASK = $3$4$netmask$5"
+MASK=$(ipcalc $(hostname -I) | awk '/Netmask/{print $2}')
+echo -e "$1$2MASK$5 = $3$4$MASK$5"
+GATEWAY=$(ip route | awk '/default/{print $3}')
+echo -e "$1$2GATEWAY$5 = $3$4$GATEWAY$5"
 
-gateway_default=$(ip r | awk '/default via / {print $3}')
-echo -e "$1$2GATEWAY = $3$4$gateway_default$5"
+RAM_TOTAL=$(free --bytes | awk '/Mem/{printf "%.3f", $2 / 1000000000}') 
+echo -e "$1$2RAM_TOTAL$5 = $3$4$RAM_TOTAL GB$5"
 
-ram_total=$(free --mega | awk '/Mem: / {printf("%.3f" ,$2 /1000)}')
-echo -e "$1$2RAM_TOTAL = $3$4$ram_total GB$5"
+RAM_USED=$(free --bytes | awk '/Mem/{printf "%.3f", $3 / 1000000000}') 
+echo -e "$1$2RAM_USED$5 = $3$4$RAM_USED GB$5"
 
-ram_used=$(free --mega | awk '/Mem: / {printf("%.3f", $3 /1000)}')
-echo -e "$1$2RAM_USED = $3$4$ram_used GB$5"
+RAM_FREE=$(free --bytes | awk '/Mem/{printf "%.3f", $4 / 1000000000}')
+echo -e "$1$2RAM_FREE$5 = $3$4$RAM_FREE GB$5"
 
-ram_free=$(free --mega | awk '/Mem: / {printf("%.3f", $4 /1000)}')
-echo -e "$1$2RAM_FREE = $3$4$ram_free GB$5"
+SPACE_ROOT=$(df -k | grep '/$' | awk '{printf "%.2f", $2 / 1000}')
+echo -e "$1$2SPACE_ROOT$5 = $3$4$SPACE_ROOT MB$5"
+ 
+SPACE_ROOT_USED=$(df -k | grep '/$' | awk '{printf "%.2f", $3 / 1000}') 
+echo -e "$1$2SPACE_ROOT_USED$5 = $3$4$SPACE_ROOT_USED MB$5"
 
-space_root=$(df -k / | awk 'NR==2 {printf("%.2f", $2 / 1000)}')
-echo -e "$1$2SPACE_ROOT = $3$4$space_root MB$5"
-
-space_used=$(df -k / | awk 'NR==2 {printf("%.2f", $3 / 1000)}')
-echo -e "$1$2SPACE_USED = $3$4$space_used MB$5"
-
-space_free=$(df -k / | awk 'NR==2 {printf("%.2f", $4 / 1000)}')
-echo -e "$1$2SPACE_FREE = $3$4$space_free MB$5"
+SPACE_ROOT_FREE=$(df -k | grep '/$' | awk '{printf "%.2f", $4 / 1000}') 
+echo -e "$1$2SPACE_ROOT_FREE$5 = $3$4$SPACE_ROOT_FREE MB$5"
