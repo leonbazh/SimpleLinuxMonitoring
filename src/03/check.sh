@@ -9,13 +9,9 @@ done
 
 args=($@)
 
-for ((i=0; i<3; i++)); do
-  for((j=i+1; j<4; j++)); do
-    if [ "${args[i]}" = "${args[j]}" ]; then
-      echo argument must be unique
-      exit 1
-    fi
-  done
-done
+if [ $1 == $2 ] || [ $3 == $4 ]; then
+  echo background and font from each row must be different
+  exit 1
+fi
 
 bash color.sh $1 $2 $3 $4
