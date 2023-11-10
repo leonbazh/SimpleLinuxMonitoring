@@ -29,7 +29,7 @@ echo "Archive files = $archive_files"
 symbolic_links=$(find $1 -type l | wc -l)
 echo "Symbolic links = $symbolic_links"
 
-top_files=$(find $1 -type f -exec du -sh {} + | sort -rh | head -n 10 | awk '{ printf "%d - %s, %s, %s\n", NR, $2, $1, substr($2, length($2) - 2) }')
+top_files=$(find "$1" -type f -exec du -sh {} + | sort -rh | head -n 10 | awk '{ cmd="basename \"" $2 "\""; cmd | getline basename; close(cmd); split(basename, parts, "."); printf "%d - %s, %s, %s\n", NR, $2, $1, parts[length(parts)] }')
 echo -e "TOP 10 files of maximum size arranged in descending order (path, size and type):\n$top_files"
 
 top_exe=$(find $1 -name *.exe -exec du -sh {} + | sort -rh | head -n 10 | awk '{ cmd="md5sum \"" $2 "\""; cmd | getline hash; close(cmd); printf "%d - %s, %s, %s\n", NR, $2, $1, hash }' | cut -d ' ' -f 1-5 )
